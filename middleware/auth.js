@@ -8,11 +8,8 @@ module.exports = (req, res, next) => {
    if ( !token ) return res.status(400).send('Access denied. No token provided.')
 
    try {
-      // console.log('my token = ', token);
-      
       const decoded = jwt.verify( token, process.env.mySecretPassword);
-      req.user = decoded;
-      // console.log("req.user from auth middleware = ", req.user);
+      req.user = decoded;      
       next();
    }
    catch (err) {

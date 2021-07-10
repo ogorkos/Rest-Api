@@ -6,9 +6,9 @@ const { createUser, findUserById, getCardsUser, patchUserCards, putUser } = requ
 
 router.post('/create', createUser)
 
-router.get('/cards', auth,getCardsUser);
-router.get('/me', auth,  findUserById)
+router.get('/cards', auth,getCardsUser)
 
+router.get('/me', auth,  findUserById)
 
 router.put('/:id', auth, putUser)
 

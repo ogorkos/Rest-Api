@@ -34,11 +34,8 @@ const schemaUser = new mongoose.Schema({
  });
 
  schemaUser.methods.generateAuthToken = function () {
-   // console.log(process.env.mySecretPassword);
    const token = jwt.sign({ _id: this._id, biz: this.biz }, process.env.mySecretPassword);
-   // console.log('token = ', token);
    const decoded = jwt.verify( token, process.env.mySecretPassword);
-   // console.log(decoded);
    return token;
  }
 
@@ -74,7 +71,6 @@ function validationUser(user) {
           .max(2015),
       cards: Joi.array()
   })
-  console.log('schema.validate = ',schema.validate(user));
   return schema.validate(user)
 }
 

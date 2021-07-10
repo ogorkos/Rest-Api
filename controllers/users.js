@@ -6,7 +6,6 @@ const { validateCards } = require('../validation/validateCards')
 
 
 exports.createUser = async (req, res) => {
-   console.log('req.body = ', req.body);
    const {error} = validationUser(req.body)
    if (error) {
       console.log(error.details[0].message);
@@ -59,13 +58,11 @@ const getCards = async (cardsArray) => {
 
 
  exports.putUser = async (req, res) => {
-    console.log(req.body);
    const { error } = validationUser(req.body);
    if (error) return res.status(400).send(error.details[0].message);
    try {
      await User.findOneAndUpdate({ _id: req.params.id },req.body);       
      const newUser = await User.findOne({ _id: req.params.id});        
-     console.log(newUser);
      res.send(newUser);
    } catch {
      return res.status(404).send('The User with the given ID was not found.')}
