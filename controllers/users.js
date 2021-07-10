@@ -1,6 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const auth = require('./../middleware/auth')
 const { User, validationUser } = require('../models/modelUser')
 const bcrypt = require('bcrypt'); 
 const _ = require('lodash');
@@ -33,15 +30,12 @@ exports.createUser = async (req, res) => {
 
 
 exports.findUserById =  async (req, res) => {
-   // console.log(req);
-   const user = await User.findById(req.user._id).select('-password')
-   console.log('cards = ', user.cards);
+   const user = await User.findById(req.user._id).select('-password')   
    res.send(user)
 }
 
 
 const getCards = async (cardsArray) => {
-   // console.log('cardsArray', cardsArray);
    try{
       const cards = await Card.find({ "bizNumber": { $in: cardsArray } });
       return cards;
@@ -52,7 +46,7 @@ const getCards = async (cardsArray) => {
  };
   
 
- exports.getUser = async (req, res) => {
+ exports.getCardsUser = async (req, res) => {
    if (!req.query.numbers) res.status(400).send("Missing numbers");
    try {
       const cards = await getCards(req.query.numbers.split(","));
@@ -64,8 +58,22 @@ const getCards = async (cardsArray) => {
  };
 
 
- exports.patchUserCards = async (req, res) => {
-  
+ exports.putUser = async (req, res) => {
+    console.log(req.body);
+   const { error } = validationUser(req.body);
+   if (error) return res.status(400).send(error.details[0].message);
+   try {
+     await User.findOneAndUpdate({ _id: req.params.id },req.body);       
+     const newUser = await User.findOne({ _id: req.params.id});        
+     console.log(newUser);
+     res.send(newUser);
+   } catch {
+     return res.status(404).send('The User with the given ID was not found.')}
+}
+
+
+
+ exports.patchUserCards = async (req, res) => {  
    const { error } = validateCards(req.body);
    if (error) res.status(400).send(error.details[0].message);
   
@@ -75,8 +83,7 @@ const getCards = async (cardsArray) => {
    let user = await User.findById(req.user._id);
    user.cards = req.body.cards;
    user = await user.save();
-   res.send(user);
-  
+   res.send(user);  
  };
 
 

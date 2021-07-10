@@ -67,7 +67,7 @@ exports.putCard = async (req, res) => {
    const { error } = validateCard(req.body);
    if (error) return res.status(400).send(error.details[0].message);
    try {
-     const card = await Card.findOneAndUpdate({ _id: req.params.id, user_id: req.user._id },req.body);        
+     await Card.findOneAndUpdate({ _id: req.params.id, user_id: req.user._id },req.body);
      const newCard = await Card.findOne({ _id: req.params.id});        
      res.send(newCard);
    } catch {

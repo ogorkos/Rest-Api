@@ -71,7 +71,8 @@ function validationUser(user) {
       birthYear: Joi.number()
           .integer()
           .min(1900)
-          .max(2015)        
+          .max(2015),
+      cards: Joi.array()
   })
   console.log('schema.validate = ',schema.validate(user));
   return schema.validate(user)
